@@ -29,6 +29,14 @@ def Analyze(sessionID):
     """Analyze and return the possible disease"""
     return requests.get("https://api.endlessmedical.com/v1/dx/Analyze?SessionID="+sessionID+"&NumberOfResults=5").json()
 
+def getDiseases(data):
+    """Extract all diseases of the analyze and store them in an array"""
+    dictio = data["Diseases"]
+    diseases = []
+    for disease in dictio:
+        diseases.append(*disease)
+    return diseases
+
 if __name__ == "__main__":
     sessionID = getSessionId()
     addSymptoms(sessionID,"Temp","90")
@@ -38,4 +46,4 @@ if __name__ == "__main__":
     addSymptoms(sessionID,"HeartBurn","0")
     addSymptoms(sessionID,"AbdCramps","0")
     addSymptoms(sessionID,"Nausea","0")
-    print(Analyze(sessionID))
+    print(getDiseases(Analyze(sessionID)))
