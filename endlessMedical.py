@@ -37,6 +37,12 @@ def getDiseases(data):
         diseases.append(*disease)
     return diseases
 
+def getLocation():
+    pass
+
+def suggestHospital(location):
+    pass
+
 if __name__ == "__main__":
     sessionID = getSessionId()
     addSymptoms(sessionID,"Temp","90")
