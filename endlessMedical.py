@@ -1,5 +1,16 @@
 import requests
 
+yn_questions = {"AbdCramps":"Abdominal cramps","Chills": "Chills","ChestPainAnginaYesNo":"Chest Pain", "Conjunctivas":"Conjunctivas",\
+                "DecreasedMood":"Decreased Mood",\
+                "Constipation":"Constipation","EatingPain":"Eating Pain","GeneralizedFatigue":"Fatigue",\
+                "HeadacheFrontal":"Headahce","ResistantHypertension":"Hypertension","HypoTension":"HypoTension",\
+                "EyesItchy":"Itching eyes","Nocturia":"Nocturia","Nausea":"Nausea", "NoseCongestion": "Nose congestion",\
+                "LossOfSmell":"Loss of smell","LossOfTaste":"Loss of taste","LossOfConsciousness":"Loss of consciousness",\
+                 "LowbackPain":"Low back pain","Seizure":"Seizure","Snoring":"Snoring","Sneezing":"Sneezing",\
+                "SwallowPain":"Pain when swallowing","Vomiting":"Vomiting","WeightLoss":"Weight loss","Weight gain":"Weight gain"}
+
+num_questions = {"Temp":"Temperature"}
+
 def getSessionId():
     """Get the session and confirmation to use the EndlessMedical API"""
     url = "https://api.endlessmedical.com/v1/dx/InitSession"
