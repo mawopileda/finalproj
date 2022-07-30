@@ -1,4 +1,5 @@
 import requests
+from requests.structures import CaseInsensitiveDict
 
 yn_questions = {"AbdCramps":"Abdominal cramps","Chills": "Chills","ChestPainAnginaYesNo":"Chest Pain", "Conjunctivas":"Conjunctivas",\
                 "DecreasedMood":"Decreased Mood",\
@@ -37,19 +38,53 @@ def getDiseases(data):
         diseases.append(*disease)
     return diseases
 
-def getLocation():
-    pass
+def getCoordinates(zip_c):
+    weather_url = 'https://api.weatherapi.com/v1/current.json'
+    weather_query = {"q": zip_c}
+    weather_headers = {
+        'key': 'e7e5a0eed9044fbab81184925222907'
+    }
 
-def suggestHospital(location):
-    pass
+    data = requests.get(weather_url, headers=weather_headers,
+                                params=weather_query).json()
+    coordinates = data['location']
+    return [coordinates['lon'],coordinates['lat']]
+
+def filter(sessionID):
+    dictio = requests.get("https://api.endlessmedical.com/v1/dx/GetSuggestedSpecializations?SessionID="+\
+                    sessionID+"&NumberOfResults=10").json()
+    specializations = []
+    for specialization in dictio['SuggestedSpecializations']:
+        specializations.append(specialization[0])
+    return specializations
+
+def getCategories(specialization):
+    
+
+def suggestHospital(coordinates,category):
+
+    dist = 10*1609.344
+    headers = CaseInsensitiveDict()
+    headers["Accept"] = "application/json"
+    main_url = "https://api.geoapify.com/v2/places?"
+    category_url = "categories="+category
+    coord_url = "&filter=circle:" + str(coordinates[0]) + \
+                "," + str(coordinates[1]) + "," + str(dist)
+    limit_url = "&limit="+str(5)
+    api_key = "&apiKey=a81ef38a8fdb430c9ff29347d1ed7825"
+    url = main_url+category_url+coord_url+limit_url+api_key
+    resp = requests.get(url,headers)
+    return resp.json()
 
 if __name__ == "__main__":
+    #print(suggestHospital(getCoordinates(65201),"healthcare"))
     sessionID = getSessionId()
     addSymptoms(sessionID,"Temp","90")
     addSymptoms(sessionID,"Fasting","0")
     addSymptoms(sessionID,"Constipation","0")
-    addSymptoms(sessionID,"Vomiting","0")
-    addSymptoms(sessionID,"HeartBurn","0")
-    addSymptoms(sessionID,"AbdCramps","0")
-    addSymptoms(sessionID,"Nausea","0")
-    print(getDiseases(Analyze(sessionID)))
+    #addSymptoms(sessionID,"Vomiting","0")
+    #addSymptoms(sessionID,"HeartBurn","0")
+    #addSymptoms(sessionID,"AbdCramps","0")
+    #addSymptoms(sessionID,"Nausea","0")
+    #print(getDiseases(Analyze(sessionID)))
+    print(filter(sessionID))
