@@ -2,7 +2,10 @@ from flask import Flask, render_template, url_for, flash, redirect
 from forms import RegistrationForm, LoginForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask_sqlalchemy import SQLAlchemy
-
+from endlessMedical import yn_questions
+from flask_login import login_user, logout_user, current_user, login_required
+from urllib.parse import urlparse, urljoin
+from sqlalchemy import or_
 
 app = Flask(__name__)
 
@@ -24,7 +27,7 @@ class User(db.Model):
 
 @app.route("/")
 def hello_world():
-    return render_template('home.html')
+    return render_template('home.html',diseases=yn_questions)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -34,13 +37,35 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
+        login_user(user)
+        flash(f'Account created for {reg_form.username.data}!', 'success')
         return redirect(url_for('login')) # if so - send to home page
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route("/login",methods=['GET','POST'])
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    return render_template('login.html',title='Log In',form=form)
+  if current_user.is_authenticated:
+    return redirect(url_for('home'))
+  login_form = LoginForm()
+  if login_form.validate_on_submit():
+    given_user = login_form.existing_user.data # form inputs
+    given_pass = login_form.existing_pass.data
+    user_obj = User.query.filter_by(username=given_user).first()
+
+    if (user_obj and bcrypt.check_password_hash(user_obj.password_hash, given_pass)):
+      login_user(user_obj)        
+
+      next = request.args.get('next')
+
+      if not is_safe_url(next):
+          return abort(400)
+
+      flash(f'Successfully logged in as {login_form.existing_user.data}!', 'success')
+      return redirect(next or url_for('home'))
+    else:
+      flash(f'Invalid username and/or password', 'danger')      
+  return render_template('login.html', title="Login", login_form=login_form)
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
