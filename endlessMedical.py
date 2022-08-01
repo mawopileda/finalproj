@@ -79,7 +79,7 @@ def getCategories(specialization):
 
     
 
-def suggestHospital(coordinates,category):
+ def suggestHospital(coordinates,category):
 
     dist = 10*1609.344
     headers = CaseInsensitiveDict()
