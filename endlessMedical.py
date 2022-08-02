@@ -59,10 +59,27 @@ def filter(sessionID):
     return specializations
 
 def getCategories(specialization):
+    categories = ""
+    if "Cardiology" in specialization:
+        categories += "healthcare.clinic_or_praxis.cardiology,"
+    if "Pulmonology" in specialization:
+        categories += "healthcare.clinic_or_praxis.pulmonology,"
+    if "Radiology" in specialization:
+        categories += "healthcare.clinic_or_praxis.radiology,"
+    if "Allergology" in specialization:
+        categories += "healthcare.clinic_or_praxis.allergology,"
+    if 'Gastroenterology' in specialization:
+        categories += "healthcare.clinic_or_praxis.gastroenterology,"
+    if "General" in specialization:
+        categories += "healthcare.clinic_or_praxis.general,"
+    categories += "healthcare.hospital"
+
+    return categories
+
+
     
 
- def suggestHospital(coordinates,category):
-
+def suggestHospital(coordinates,category):
     dist = 10*1609.344
     headers = CaseInsensitiveDict()
     headers["Accept"] = "application/json"
@@ -74,17 +91,30 @@ def getCategories(specialization):
     api_key = "&apiKey=a81ef38a8fdb430c9ff29347d1ed7825"
     url = main_url+category_url+coord_url+limit_url+api_key
     resp = requests.get(url,headers)
-    return resp.json()
+    places = resp.json()["features"]
+    hospitals = []
+
+    for place in places:
+        detail = place["properties"]
+        try:
+            name = detail["name"]
+            address = detail["address_line1"] + " " + detail["address_line2"]
+        except Exception:
+            name = detail["street"]
+            address = detail["address_line1"] + " " + detail["address_line2"]
+
+        hospital = {'name': name, 'address': address}
+        hospitals.append(hospital)
+        
+    return hospitals
 
 if __name__ == "__main__":
     #print(suggestHospital(getCoordinates(65201),"healthcare"))
     sessionID = getSessionId()
-    addSymptoms(sessionID,"Temp","90")
-    addSymptoms(sessionID,"Fasting","0")
-    addSymptoms(sessionID,"Constipation","0")
-    #addSymptoms(sessionID,"Vomiting","0")
-    #addSymptoms(sessionID,"HeartBurn","0")
-    #addSymptoms(sessionID,"AbdCramps","0")
-    #addSymptoms(sessionID,"Nausea","0")
-    #print(getDiseases(Analyze(sessionID)))
-    print(filter(sessionID))
+    #addSymptoms(sessionID,"Temp","90")
+    addSymptoms(sessionID,"AbdCramps","0")
+    addSymptoms(sessionID,"Chills","0")
+    print(getDiseases(Analyze(sessionID)))
+    #filter = filter(sessionID)
+    #categories = getCategories(filter)
+    #print(filter,'\n',suggestHospital(getCoordinates(65201),categories))

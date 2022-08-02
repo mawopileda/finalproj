@@ -1,9 +1,9 @@
 from datetime import datetime, date
-from flask import Flask, render_template, url_for, flash, redirect , request
+from flask import Flask, render_template, url_for, flash, redirect , request, session
 from forms import RegistrationForm, LoginForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask_sqlalchemy import SQLAlchemy
-
+from endlessMedical import getSessionId,addSymptoms,Analyze,getDiseases,suggestHospital,getCoordinates,filter,getCategories
 
 app = Flask(__name__)
 
@@ -36,9 +36,9 @@ class User(db.Model):
   def __repr__(self):
     return f"User('{self.username}', '{self.email}')"
 
-@app.route("/")
+"""@app.route("/")
 def home():
-    return render_template('home.html')
+    return render_template('home.html')"""
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -58,13 +58,16 @@ def login():
     return render_template('login.html',title='Log In',form=form)
 
 
-@app.route("/abdominalchecker", methods = ['GET','POST'])# this tells you the URL the method below is related to
-def abdominalchecker():
+@app.route("/", methods = ['GET','POST'])# this tells you the URL the method below is related to
+def home():
+    #Get session Id for analysis
+    session['ID'] = sessionID = getSessionId()
     if request.method == 'POST':
         items = request.form.getlist('mycheckbox')
         #change the user_symptom list to string and use it symtom text
         user_symptom = ""
         for item in items:
+            addSymptoms(sessionID,item,"0")
             user_symptom += str(item) + " "
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
@@ -73,10 +76,16 @@ def abdominalchecker():
         #day
         today1 = date.today()
         #print(today1)
+        analysis = Analyze(sessionID)
+        session["diseases"] = getDiseases(analysis)
+        specializations = filter(sessionID)
+        session["hospitals"] = suggestHospital(getCoordinates('80525'),getCategories(specializations))
         symptom = Symptomtrack(time= str(current_time) , date= str(today1), symptom = user_symptom)
         db.session.add(symptom)
         db.session.commit()
-        return 'Done'
+        print(session['diseases'],"\n",session['hospitals'])
+        return " ".join(session['diseases'])
+#        return "Done"
     return render_template('home.html')
 
 if __name__ == '__main__':
