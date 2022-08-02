@@ -60,6 +60,7 @@ def filter(sessionID):
 
 def getCategories(specialization):
     
+    
 
  def suggestHospital(coordinates,category):
 
