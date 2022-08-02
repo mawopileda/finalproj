@@ -1,137 +1,40 @@
-DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-	<head>
-		<title>{{ title }}</title>
-
-        <!--Meta tag-->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-		<!--Bootstrap CSS CDN Link -->
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-		<!--FontAwesome CDN Link -->
-		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
-
-		<!--CSS Stylesheet file -->
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/style.css') }}">
-	</head>
-
-	<body>
-		<header>
-
-		<!-- Navigation Bar -->
-
-		        <nav class="navbar navbar-expand-lg navbar-light menu fixed-top">
-	                    <a href="#" class="navbar-brand"> <img src="{{ url_for('static', filename='images/trivia.jpg') }}" width="250px" height="130px" alt="logo image"> </a>
- 	                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navigationBar">
- 	                    <span class="navbar-toggler-icon"></span>
- 	                    </button>
- 	                    <div class="collapse navbar-collapse " id="navigationBar">
-
- 		                    <ul class="navbar-nav ml-auto">
-
-								<li class="nav-item active px-3"><a href="{{ url_for('static', filename='index.html') }}" class="nav-link">
-                                     <button class="btn btn-lg btn-default lr-btn"><i class="fa fa-home"></i>Home</button></a>
-                                </li>
-
-                                {% if session.username%}
-								<li class="nav-item active px-3"><a href="{{ url_for('static', filename='category.html') }}" class="nav-link">
-                                     <button class="btn btn-lg btn-default lr-btn"><i class="fa fa-question"></i> Start New Quiz</button></a>
-                                </li>
-	
-								<li class="nav-item lr"><a href="{{ url_for('stats') }}" class="nav-link">
-                                	<button class="btn btn-lg btn-default lr-btn"><i class=" fa fa-edit"></i> Show Stats</button></a>
-                                </li>	
-
-								<li class="nav-item lr"><a href="{{ url_for('logout') }}" class="nav-link">
-                                	<button class="btn btn-lg btn-default lr-btn"><i class=" fa fa-edit"></i> Logout</button></a>
-                                </li>
-
-								{%else%}
-
-								<li class="nav-item lr"><a href="{{ url_for('static', filename='register.html') }}" class="nav-link">
-                                	<button class="btn btn-lg btn-default lr-btn"><i class=" fa fa-edit"></i> Register</button></a>
-                                </li>
-                                
-								<li class="nav-item lr"><a href="{{ url_for('static', filename='login.html') }}" class="nav-link">
-                                	<button class="btn btn-lg btn-default lr-btn"><i class=" fa fa-user"></i> Login</button></a>
-								</li>
-
-								{%endif%}
-
-                            </ul>
-
-                        </div>        
-                </nav>
+    <head>
+       
+    
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 
-		<!-- End Navigation Bar -->
+        <script defer src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+        
+    </head>
 
-		</header>
-		{% if session.username%}
-		<div class="username">
-    	<b>USERNAME: {{session.username}} </b>
-		</div>
-		{% endif%}
-        <main>{% block content %}{% endblock %}</main>
+    <body style="background-color:rgb(166, 204, 255);">
+            
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/"> <h1><b>SymptomTap</b></h1> </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        
 
-        <footer>
-        	<!--footer-->
-        	<section class="footer">
-        		<div class="footerContent">
-        			<center>
-        				<div class="row footerRow">
-        					<div class="col-md-4">
-        						<h5><strong>Quick Links</strong></h5>
-        						<hr>
-        						<ul>
-        							<li><a href="#">Blog</a></li>
-        							<li><a href="#">Contact Us</a></li>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/register">Register<span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/login">Log in<span class="sr-only"></span></a>
+                    </li>
 
-        						</ul>
-        					</div>
+                </ul>
+            </div>
 
-        					<div class="col-md-4">
-        						<h5><strong>  Social Media</strong></h5>
-        						<hr>
-        						<ul class="socialIcons">
-        							<li><a href="#"><i class="fab fa-facebook-f ml-3"></i></a></li>
-        							<li><a href="#"><i class="fab fa-twitter"></i></a></li>
-        							<li><a href="#"><i class="fab fa-youtube"></i></a></li>
-        							<li><a href="#"><i class="fab fa-instagram"></i></a></li>
-        						</ul>
-        					</div>
-
-        					<div class="col-md-4">
-        						<h5><strong>Newsletter</strong></h5>
-        						<hr>
-        						<p>Stay Connected! <br>  Subscribe to our newsletter.</p>
-        						<form class="form-inline">
-        							<div class="input-group mb-3">
-        								<input type="text" class="subscribeField" placeholder="Email address">
-        								<div class="input-group-append">
-        									<button class="btn btn-success form-btn">Subscribe</button>
-        								</div>
-        							</div>
-        						</form>
-        					</div>
-        				</div>
-        			</center>
-        		</div>
-
-        		<div class="footerCopyright">
-        			<span id="copyRight">All rights reserved. Crafted With <i class="fa fa-heart"></i> By Cheick, Hana, Tatenda & Mary. </span>
-        		</div>
-
-        	</section>
-
-         </footer>
-         <!--End of Footer-->
-
-        <!-- JavaScript CDN links -->
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-		
-	</body>
+        </nav>
+        {% block content %}{% endblock %}
+   
+    </body>
 </html>

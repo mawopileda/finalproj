@@ -20,7 +20,3 @@ class LoginForm(FlaskForm):
                         validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
-
-class DiseasesForm(FlaskForm):
-    symptom = StringField('symptoms')
-    submit = SubmitField('Analyze')

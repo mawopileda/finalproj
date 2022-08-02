@@ -1,8 +1,8 @@
-from flask import Flask, render_template, url_for, flash, redirect
+from flask import Flask, render_template, url_for, flash, redirect, request,session
 from forms import RegistrationForm, LoginForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask_sqlalchemy import SQLAlchemy
-from endlessMedical import yn_questions
+from endlessMedical import getSessionId,addSymptoms,Analyze,getDiseases,suggestHospital,getCoordinates,filter,getCategories
 from flask_login import login_user, logout_user, current_user, login_required
 from urllib.parse import urlparse, urljoin
 from sqlalchemy import or_
@@ -26,8 +26,21 @@ class User(db.Model):
     return f"User('{self.username}', '{self.email}')"
 
 @app.route("/")
-def hello_world():
-    return render_template('home.html',diseases=yn_questions)
+def home():
+  try:
+    #print(session['diseases'])
+    #print()
+    #print(session['hospitals'])
+    diseases = getDiseases(Analyze(session['ID']))
+    print(diseases)
+    specializations = filter(session['ID'])
+    hospitals = suggestHospital(getCoordinates('80525'),getCategories(specializations))
+    print(hospitals)
+
+  except:
+    session['diseases'] = []
+    session['hospitals'] = []
+  return render_template('home.html')
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -66,6 +79,20 @@ def login():
     else:
       flash(f'Invalid username and/or password', 'danger')      
   return render_template('login.html', title="Login", login_form=login_form)
+
+@app.route("/symptoms", methods = ['GET','POST'])# this tells you the URL the method below is related to
+def abdominalchecker():
+    session['ID'] = sessionID = getSessionId()
+    if request.method == 'POST':
+        symptoms = request.form.getlist('mycheckbox')
+        for symptom in symptoms:
+          addSymptoms(sessionID,symptom,"0")
+        #session["diseases"] = getDiseases(Analyze(sessionID))
+        #specializations = filter(sessionID)
+        #session["hospitals"] = suggestHospital(getCoordinates('80525'),getCategories(specializations))
+        #return 'Done'
+        return redirect(url_for('home'))
+    return render_template('symptoms.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

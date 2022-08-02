@@ -79,8 +79,7 @@ def getCategories(specialization):
 
     
 
- def suggestHospital(coordinates,category):
-
+def suggestHospital(coordinates,category):
     dist = 10*1609.344
     headers = CaseInsensitiveDict()
     headers["Accept"] = "application/json"
@@ -112,14 +111,10 @@ def getCategories(specialization):
 if __name__ == "__main__":
     #print(suggestHospital(getCoordinates(65201),"healthcare"))
     sessionID = getSessionId()
-    addSymptoms(sessionID,"Temp","90")
-    addSymptoms(sessionID,"Fasting","0")
-    addSymptoms(sessionID,"Constipation","0")
-    #addSymptoms(sessionID,"Vomiting","0")
-    #addSymptoms(sessionID,"HeartBurn","0")
-    #addSymptoms(sessionID,"AbdCramps","0")
-    #addSymptoms(sessionID,"Nausea","0")
-    #print(getDiseases(Analyze(sessionID)))
-    filter = filter(sessionID)
-    categories = getCategories(filter)
-    print(filter,'\n',suggestHospital(getCoordinates(65201),categories))
+    #addSymptoms(sessionID,"Temp","90")
+    addSymptoms(sessionID,"AbdCramps","0")
+    addSymptoms(sessionID,"Chills","0")
+    print(getDiseases(Analyze(sessionID)))
+    #filter = filter(sessionID)
+    #categories = getCategories(filter)
+    #print(filter,'\n',suggestHospital(getCoordinates(65201),categories))
