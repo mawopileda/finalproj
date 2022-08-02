@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, url_for, flash, redirect , request
 from forms import RegistrationForm, LoginForm
 from flask_behind_proxy import FlaskBehindProxy
@@ -43,11 +44,13 @@ def login():
     form = LoginForm()
     return render_template('login.html',title='Log In',form=form)
 
+
 @app.route("/abdominalchecker", methods = ['GET','POST'])# this tells you the URL the method below is related to
 def abdominalchecker():
     if request.method == 'POST':
         print(request.form.getlist('mycheckbox'))
         return 'Done'
     return render_template('home.html')
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
