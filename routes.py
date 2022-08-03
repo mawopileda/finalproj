@@ -24,7 +24,7 @@ class User(db.Model):
 
 @app.route("/")
 def hello_world():
-    return render_template('home.html')
+    return render_template('dashboard.html')
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
