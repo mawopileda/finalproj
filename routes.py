@@ -23,7 +23,11 @@ class User(db.Model):
     return f"User('{self.username}', '{self.email}')"
 
 @app.route("/")
-def hello_world():
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route("/aboutus")
+def aboutus():
     return render_template('aboutus.html')
 
 @app.route("/register", methods=['GET', 'POST'])

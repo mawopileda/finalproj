@@ -158,10 +158,10 @@ div.b
 		<div class="collapse navbar-collapse" id="navi">
 			<!-------navigation menus---->
 		<ul class="nav navbar-nav navbar-right">
-			<li><a href="index.html">Home</a></li>
+			<li><a href="{{ url_for('login') }}">Login/Register</a></li>
 			<li><a href=""Login</a></li>
-      <li><a href="dashboard.html">Dashboard</a></li>
-      <li><a href="aboutus.html">About Us</a></li>
+      <li><a href="{{ url_for('dashboard') }}">Symptoms</a></li>
+      <li><a href="{{ url_for('aboutus') }}">About Us</a></li>
 			
 			
 		</ul>

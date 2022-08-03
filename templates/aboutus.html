@@ -1,24 +1,10 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
+{% block content %}
+
 <head>
 	<title>Endless Medical</title>
     
-	<link rel="shortcut icon " type="text/css" href="">
-
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
 	
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-	
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-	<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-	<!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     
     <style>
  
@@ -163,10 +149,9 @@ div.b
 		<ul class="nav navbar-nav navbar-right">
 			
 			
-			<li><a href="login.html">Login/Register</a></li>
-      <li><a href="dashboard.html">Dashboard</a></li>
-			<li><a href="">About Us</a></li>
-			<li><a href="login.html"</a></li>
+			<li><a href="{{ url_for('aboutus') }}">Home</a></li>
+            <li><a href="{{ url_for('login') }}">Login/Register</a></li>
+            <li><a href="{{ url_for('dashboard') }}">Symptoms</a></li>
      
 			
 		</ul>
@@ -326,6 +311,6 @@ bid to provide you – our customers – with world-class healthcare experiences
 
 
 
-
+{% endblock content %}
 
 </html>
