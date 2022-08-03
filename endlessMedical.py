@@ -1,5 +1,4 @@
-from requests import post as requests.post
-from requests import get as requests.get
+from requests import post,get
 from requests.structures import CaseInsensitiveDict
 
 yn_questions = {"AbdCramps":"Abdominal cramps","Chills": "Chills","ChestPainAnginaYesNo":"Chest Pain", "Conjunctivas":"Conjunctivas",\
@@ -18,18 +17,20 @@ def getSessionId():
     url = "https://api.endlessmedical.com/v1/dx/InitSession"
     sessionID = requests.get(url).json()['SessionID']
     confirm =  "I have read, understood and I accept and agree to comply with the Terms of Use of EndlessMedicalAPI and Endless Medical services. The Terms of Use are available on endlessmedical.com"
-    requests.post("https://api.endlessmedical.com/v1/dx/AcceptTermsOfUse?SessionID="+sessionID+"&passphrase="+confirm)
+#    requests.post("https://api.endlessmedical.com/v1/dx/AcceptTermsOfUse?SessionID="+sessionID+"&passphrase="+confirm)
+    post("https://api.endlessmedical.com/v1/dx/AcceptTermsOfUse?SessionID="+sessionID+"&passphrase="+confirm)
     return sessionID
 
 def addSymptoms(sessionID,name,value):
     """Create the symptoms string"""
-    requests.post("https://api.endlessmedical.com/v1/dx/UpdateFeature?SessionID="+sessionID+"&name="+name+"&value="+value)
+#    requests.post("https://api.endlessmedical.com/v1/dx/UpdateFeature?SessionID="+sessionID+"&name="+name+"&value="+value)
+    post("https://api.endlessmedical.com/v1/dx/UpdateFeature?SessionID="+sessionID+"&name="+name+"&value="+value)
     
 
 
 def Analyze(sessionID):
     """Analyze and return the possible disease"""
-    return requests.get("https://api.endlessmedical.com/v1/dx/Analyze?SessionID="+sessionID+"&NumberOfResults=5").json()
+    return get("https://api.endlessmedical.com/v1/dx/Analyze?SessionID="+sessionID+"&NumberOfResults=5").json()
 
 def getDiseases(data):
     """Extract all diseases of the analyze and store them in an array"""
@@ -46,7 +47,7 @@ def getCoordinates(zip_c):
         'key': 'e7e5a0eed9044fbab81184925222907'
     }
 
-    data = requests.get(weather_url, headers=weather_headers,
+    data = get(weather_url, headers=weather_headers,
                                 params=weather_query).json()
     coordinates = data['location']
     return [coordinates['lon'],coordinates['lat']]
@@ -91,7 +92,7 @@ def suggestHospital(coordinates,category):
     limit_url = "&limit="+str(5)
     api_key = "&apiKey=a81ef38a8fdb430c9ff29347d1ed7825"
     url = main_url+category_url+coord_url+limit_url+api_key
-    resp = requests.get(url,headers)
+    resp = get(url,headers)
     places = resp.json()["features"]
     hospitals = []
 
