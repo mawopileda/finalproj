@@ -24,7 +24,7 @@ class User(db.Model):
 
 @app.route("/")
 def hello_world():
-    return render_template('dashboard.html')
+    return render_template('aboutus.html')
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -35,7 +35,7 @@ def register():
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('login')) # if so - send to home page
-    return render_template('register.html', title='Register', form=form)
+    return render_template('login.html', title='Register', form=form)
 
 
 @app.route("/login",methods=['GET','POST'])
@@ -43,4 +43,5 @@ def login():
     form = LoginForm()
     return render_template('login.html',title='Log In',form=form)
 if __name__ == '__main__':
+    
     app.run(debug=True, host="0.0.0.0")
