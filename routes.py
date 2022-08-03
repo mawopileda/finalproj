@@ -1,8 +1,9 @@
-from flask import Flask, render_template, url_for, flash, redirect
+from datetime import datetime, date
+from flask import Flask, render_template, url_for, flash, redirect , request, session
 from forms import RegistrationForm, LoginForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask_sqlalchemy import SQLAlchemy
-
+from endlessMedical import getSessionId,addSymptoms,Analyze,getDiseases,suggestHospital,getCoordinates,filter,getCategories
 
 app = Flask(__name__)
 
@@ -10,8 +11,21 @@ proxied = FlaskBehindProxy(app)  ## add this line
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'eae4d31ce5ddcbd006c3fca0d8183dd2'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///userdata.db'
 db = SQLAlchemy(app)
+
+# model that define what will be included in the database
+# db.model is the way that shows how our database will look like
+
+class Symptomtrack(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.String(30),  nullable= False)
+    date = db.Column(db.String(30),  nullable= False)
+    #need to check wheather it should be null or not 
+    symptom = db.Column(db.Text)
+    # this is a magic method 
+    def __repr__(self):
+        return f"User('{self.time}', '{self.date}', '{self.symptom}')" 
 
 class User(db.Model):
   id = db.Column(db.Integer, primary_key=True)
@@ -22,9 +36,9 @@ class User(db.Model):
   def __repr__(self):
     return f"User('{self.username}', '{self.email}')"
 
-@app.route("/")
+"""@app.route("/")
 def home():
-    return render_template('home.html')
+    return render_template('home.html')"""
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -42,5 +56,37 @@ def register():
 def login():
     form = LoginForm()
     return render_template('login.html',title='Log In',form=form)
+
+
+@app.route("/", methods = ['GET','POST'])# this tells you the URL the method below is related to
+def home():
+    #Get session Id for analysis
+    session['ID'] = sessionID = getSessionId()
+    if request.method == 'POST':
+        items = request.form.getlist('mycheckbox')
+        #change the user_symptom list to string and use it symtom text
+        user_symptom = ""
+        for item in items:
+            addSymptoms(sessionID,item,"0")
+            user_symptom += str(item) + " "
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        #date = now.day()
+        #print(current_time)
+        #day
+        today1 = date.today()
+        #print(today1)
+        analysis = Analyze(sessionID)
+        session["diseases"] = getDiseases(analysis)
+        specializations = filter(sessionID)
+        session["hospitals"] = suggestHospital(getCoordinates('80525'),getCategories(specializations))
+        symptom = Symptomtrack(time= str(current_time) , date= str(today1), symptom = user_symptom)
+        db.session.add(symptom)
+        db.session.commit()
+        print(session['diseases'],"\n",session['hospitals'])
+        return " ".join(session['diseases'])
+#        return "Done"
+    return render_template('home.html')
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
