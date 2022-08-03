@@ -14,4 +14,4 @@ flask_bcrypt == 1.0.1
 pytest == 6.2.4
 requests == 2.18.4
 WTForms == 2.3.3
-requests
+requests == 2.18.4

@@ -1,4 +1,5 @@
-import requests
+from requests import post as requests.post
+from requests import get as requests.get
 from requests.structures import CaseInsensitiveDict
 
 yn_questions = {"AbdCramps":"Abdominal cramps","Chills": "Chills","ChestPainAnginaYesNo":"Chest Pain", "Conjunctivas":"Conjunctivas",\
