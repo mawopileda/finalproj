@@ -31,6 +31,18 @@ login_manager.login_message_category = 'info'
 
 class Symptomtrack(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(60))
+    time = db.Column(db.String(30),  nullable= False)
+    date = db.Column(db.String(30),  nullable= False)
+    #need to check wheather it should be null or not 
+    symptom = db.Column(db.Text)
+    # this is a magic method 
+    def __repr__(self):
+        return f"User('{self.time}', '{self.date}', '{self.symptom}')" 
+
+class Symptomtrack2(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(60))
     time = db.Column(db.String(30),  nullable= False)
     date = db.Column(db.String(30),  nullable= False)
     #need to check wheather it should be null or not 
@@ -121,13 +133,15 @@ def home():
         today1 = date.today()
         #print(today1)
         analysis = Analyze(sessionID)
+        if len(analysis) == 0:
+          Analyze(sessionID)
         session["diseases"] = getDiseases(analysis)
         specializations = filter(sessionID)
         session["hospitals"] = suggestHospital(getCoordinates('80525'),getCategories(specializations))
-        symptom = Symptomtrack(time= str(current_time) , date= str(today1), symptom = user_symptom)
-        db.session.add(symptom)
-        db.session.commit()
-        print(session['diseases'],"\n",session['hospitals'])
+        if current_user.is_authenticated:
+          symptom = Symptomtrack2(time= str(current_time) , username = current_user.username,date= str(today1), symptom = user_symptom)
+          db.session.add(symptom)
+          db.session.commit()
         return " ".join(session['diseases'])
 #        return "Done"
     return render_template('home.html')
@@ -158,6 +172,13 @@ def healthy():
     meals = generated['meals']
     nutrients = generated["nutrients"]
   return render_template('healthy.html',form = meal_form,meals = meals,nutrients=nutrients)
+
+@login_required
+@app.route("/profile", methods = ['GET','POST'])
+def profile():
+  symptoms = Symptomtrack2.query.filter_by(username = current_user.username).order_by(Symptomtrack2.id.desc()).all()
+  return render_template('profile.html',username=current_user.username,symptoms=symptoms)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
