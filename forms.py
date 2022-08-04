@@ -12,6 +12,11 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), 
                                      EqualTo('password')])
+    age = StringField('Age',
+                        validators=[DataRequired()])
+    zip_c = StringField('Zip Code',
+                        validators=[DataRequired()])
+
     submit = SubmitField('Sign Up')
 
 

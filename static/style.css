@@ -36,7 +36,9 @@
 
 .container {
   padding: 2px 16px;
+  
 }
+
 
 h1, h2, h3, h4, h5, h6{
     text-align: center;
@@ -74,6 +76,10 @@ p{
     font-size: 18px; 
     color: #6a6c6d; 
     line-height: 1.8;
+}
+
+.submit_button{
+    text-align: center;
 }
 ​
 p, h1, h2, h3, h4, h5, h6 {

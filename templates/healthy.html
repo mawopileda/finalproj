@@ -3,37 +3,8 @@
 <form method="POST">
     <fieldset class="form-group">
         {{ form.hidden_tag() }}
-            <div class="form-group">
-            {{ form.diet.label(class="form-control-label") }}
-            {% if form.diet.errors %}
-            {{ form.diet(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.diet.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.diet(class="form-control form-control-lg") }}
-        {% endif %}
-        </div>
 
-
-        <div class="form-group">
-            {{ form.exclude.label(class="form-control-label") }}
-            {% if form.exclude.errors %}
-            {{ form.exclude(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.exclude.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.exclude(class="form-control form-control-lg") }}
-        {% endif %}
-        </div>
-    
     </fieldset>
-    <input type="submit" class="btn btn-primary btn-forms">
     <div id = "result_container">
         {% for meal in meals %}
             <table> 
@@ -43,11 +14,19 @@
             </table>
         {% endfor %}
 
+        <div class="card1">
+        <div class="container">
         <h3>Meal Plan Summary:</h3>
         <p>Calories : {{ nutrients["calories"] }}</p>
         <p>Carbohydrates : {{ nutrients["carbohydrates"] }}</p>
         <p>Fat : {{ nutrients["fat"] }}</p>
         <p>Protein : {{ nutrients["protein"] }}</p>
+        </div>
+        </div>
     </div>
+
+    <input type="submit" name="submit_button" value="Generate Random" class="btn btn-primary btn-forms">
+    <input type="submit" name="submit_button" value="Save" class="btn btn-primary btn-forms">
+
 </form>
 {% endblock content %}

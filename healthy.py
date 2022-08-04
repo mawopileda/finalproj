@@ -6,8 +6,7 @@ def generate_meal_plans(timeFrame="day",diet="",calories="",exclude=""):
     main_url += time
     if calories != "":
         main_url += "&targetCalories"+calories
-    if diet != "":
-        main_url += "&diet"+diet
+    main_url += "&diet"+diet
     if exclude != "":
         main_url += "&exclude"+exclude
     

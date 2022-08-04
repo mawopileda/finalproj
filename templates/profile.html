@@ -12,4 +12,17 @@
 </div>
 </div>
 {% endfor %}
+<div>
+<h1><b>Favorite Foods</b></h1>
+
+{% for meal in meals %}
+<div class="card">
+<h4>{{ meal.title }}</h4>
+<div class="card-body">
+<h5>{{ meal.recipe }}</h5>
+</div>
+</div>
+</div>
+{% endfor %}
+
 {% endblock content %}

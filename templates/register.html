@@ -75,6 +75,37 @@
             {% endif %}
             </div>
 
+          <div class="form-group">
+            {{ form.age.label(class="form-control-label") }}
+            <i class="fas fa-lock"></i>
+            {% if form.age.errors %}
+              {{ form.age(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.age.errors%}
+                  <span>{{error}}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.age(class="form-control form-control-lg") }}
+            {% endif %}
+            </div>
+
+            <div class="form-group">
+            {{ form.zip_c.label(class="form-control-label") }}
+            <i class="fas fa-lock"></i>
+            {% if form.zip_c.errors %}
+              {{ form.zip_c(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.zip_c.errors%}
+                  <span>{{error}}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.zip_c(class="form-control form-control-lg") }}
+            {% endif %}
+            </div>
+
+
         <button>register</button>
         <!-- <p class="message">Not registered? <a href="#">Create an account</a></p> -->
       </form>

@@ -3,7 +3,7 @@ from flask import Flask, render_template, url_for, flash, redirect , request, se
 from forms import RegistrationForm, LoginForm, MealForm
 from flask_behind_proxy import FlaskBehindProxy
 from flask_sqlalchemy import SQLAlchemy
-from endlessMedical import getSessionId,addSymptoms,Analyze,getDiseases,suggestHospital,getCoordinates,filter,getCategories
+from endlessMedical import getSessionId,addSymptoms,Analyze,getDiseases,suggestHospital,getCoordinates,filter,getCategories,yn_questions
 from flask_login import login_user, logout_user, current_user, login_required, LoginManager, UserMixin
 from flask_bcrypt import Bcrypt
 from urllib.parse import urlparse, urljoin
@@ -57,9 +57,17 @@ class User(db.Model,UserMixin):
   username = db.Column(db.String(20), unique=True, nullable=False)
   email = db.Column(db.String(120), unique=True, nullable=False)
   password = db.Column(db.String(60), nullable=False)
+  zip_code = db.Column(db.String(60), nullable=False)
 
   def __repr__(self):
     return f"User('{self.username}', '{self.email}')"
+
+class Meal(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  title = db.Column(db.String(20), unique=True, nullable=False)
+  recipe = db.Column(db.String(320), unique=True, nullable=False)
+  username = db.Column(db.String(70))
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -67,15 +75,22 @@ def load_user(user_id):
 
 @app.route("/")
 def home():
-    return render_template('home.html')
+  if current_user.is_authenticated:
+    return redirect(url_for('results'))
+  return redirect(url_for('login'))
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    session['id'] = ''
+    session['diseases'] = ''
+    session['hospitals'] = ''
+    session['symptom'] = ''
     if current_user.is_authenticated:
         logout_user()
     form = RegistrationForm()
     if form.validate_on_submit(): # checks if entries are valid
-        user = User(username=form.username.data, email=form.email.data, password=bcrypt.generate_password_hash(form.password.data))
+        user = User(username=form.username.data, email=form.email.data, password=bcrypt.generate_password_hash(form.password.data),
+        zip_code=form.zip_c.data)
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
@@ -115,38 +130,35 @@ def logout():
   logout_user()
   return redirect(url_for('login'))
 
-
+@login_required
 @app.route("/addsymptoms", methods = ['GET','POST'])# this tells you the URL the method below is related to
 def symptoms():
     #Get session Id for analysis
     session['ID'] = sessionID = getSessionId()
     if request.method == 'POST':
         items = request.form.getlist('mycheckbox')
-        session['symptom'] = items
+        session['symptom'] = []
         #change the user_symptom list to string and use it symtom text
         user_symptom = ""
         for item in items:
+            session['symptom'].append(yn_questions[str(item)])
             addSymptoms(sessionID,item,"0")
-            user_symptom += str(item) + ","
+            user_symptom += yn_questions[str(item)] + ","
+
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
-        #date = now.day()
-        #print(current_time)
-        #day
         today1 = date.today()
-        #print(today1)
         analysis = Analyze(sessionID)
         if len(analysis) == 0:
           Analyze(sessionID)
         session["diseases"] = getDiseases(analysis)
         specializations = filter(sessionID)
-        session["hospitals"] = suggestHospital(getCoordinates('80525'),getCategories(specializations))
+        session["hospitals"] = suggestHospital(getCoordinates(current_user.zip_code),getCategories(specializations))
         if current_user.is_authenticated:
           symptom = Symptomtrack2(time= str(current_time) , username = current_user.username,date= str(today1), symptom = user_symptom)
           db.session.add(symptom)
           db.session.commit()
         return redirect(url_for('results'))
-#        return "Done"
     return render_template('addsymptoms.html')
 
 def check_url(target):
@@ -155,6 +167,7 @@ def check_url(target):
     return test_url.scheme in ('http', 'https') and \
            ref_url.netloc == test_url.netloc
 
+@login_required
 @app.route("/healthy", methods = ['GET','POST'])
 def healthy():
   meals = []
@@ -163,6 +176,16 @@ def healthy():
   period='day'
   diet=calories=exclude=""
   if request.method == 'POST':
+    if request.form["submit_button"] == 'Save':
+      print(session['meals'],"here")
+      for meal in session["meals"]:
+        new_meal = Meal(title=meal['title'],recipe=meal['sourceUrl'],username = current_user.username)
+        print(new_meal.title)
+        db.session.add(new_meal)
+        db.session.commit()
+      session['meals'] = meals
+      return redirect(url_for('results'))
+
     if meal_form.period.data:
       period = meal_form.period.data
     if meal_form.diet.data:
@@ -172,16 +195,19 @@ def healthy():
     if meal_form.exclude.data:
       exclude = meal_form.exclude.data
     generated = generate_meal_plans(period,diet,calories,exclude)
-    print(generated)
-    meals = generated['meals']
+    
+    session['meals'] = meals = generated['meals']
     nutrients = generated["nutrients"]
+
   return render_template('healthy.html',form = meal_form,meals = meals,nutrients=nutrients)
 
 @login_required
 @app.route("/profile", methods = ['GET','POST'])
 def profile():
   symptoms = Symptomtrack2.query.filter_by(username = current_user.username).order_by(Symptomtrack2.id.desc()).all()
-  return render_template('profile.html',username=current_user.username,symptoms=symptoms)
+  meals = Meal.query.filter_by(username = current_user.username).order_by(Meal.id.desc()).all()
+  print(meals)
+  return render_template('profile.html',username=current_user.username,symptoms=symptoms, meals = meals)
 
 @login_required
 @app.route("/symptom_display", methods = ['GET','POST'])
