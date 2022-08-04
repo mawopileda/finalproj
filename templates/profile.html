@@ -1,8 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
+<div
 <h3>{{username}}</h3>
 {% for symptom in symptoms %}
+<div class="card">
 <h4>{{ symptom.date }} {{ symptom.time }}</h4>
-<h5>{{ symptom.symptom }}
+<div class="car-body">
+<h5>{{ symptom.symptom }}</h5>
+</div>
+</div>
 {% endfor %}
 {% endblock content %}

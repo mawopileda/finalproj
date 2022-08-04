@@ -1,8 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
 <h3 class="text-center mt-5"><strong>Login to your account</strong></h2>
   <form method="POST">
-
+​
     {{ form.hidden_tag() }}
         <div class="form-group">
             {{ form.email.label(class="form-control-label") }}
@@ -18,7 +22,7 @@
             {{ form.email(class="form-control form-control-lg") }}
         {% endif %}
         </div>
-
+​
         <div class="form-group">
         {{ form.password.label(class="form-control-label") }}
         <i class="fas fa-lock"></i>
@@ -43,4 +47,4 @@
       <p style="text-align:center;"">{{ messages[-1] }} </p>
     {% endif %}
   {% endwith %}
-{% endblock content %}
+{% endblock %}

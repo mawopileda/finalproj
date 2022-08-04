@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>
+  Analysis result
+</h1>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<html>
+<body>
+<div class='card1'>
+    <h4>Symptoms</h4>
+    <div class='container'>
+        {% for item in items %}
+        <p>{{ item }}</p>
+        {% endfor %}
+    </div>
+</div>
+<div class="card2">
+    <h4>Diseases</h4>
+    <div class='container'>
+        {% for disease in diseases %}
+        <p>{{ disease }}</p>
+        {% endfor %}
+    </div>
+</div>
+<div class="card1">
+    <b>It is important to reach out to a doctor. Based on your symptoms we recommand you to reach to 
+    to one of those of hospitals. They will be able to help you appropriately.
+    </b>
+    <div class="container">
+    <table>
+        {% for hospital in hospitals %}
+        <tr>
+            <td>{{ hospital['name'] }}</td> <td>{{ hospital['address'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+    </div>
+</div>
+</body>
+</html>
+{% endblock content %}

@@ -98,7 +98,7 @@ def suggestHospital(coordinates,category):
         detail = place["properties"]
         try:
             name = detail["name"]
-            address = detail["address_line1"] + " " + detail["address_line2"]
+            address = detail["address_line2"]
         except Exception:
             name = detail["street"]
             address = detail["address_line1"] + " " + detail["address_line2"]
@@ -106,7 +106,7 @@ def suggestHospital(coordinates,category):
         hospital = {'name': name, 'address': address}
         hospitals.append(hospital)
         
-    return places
+    return hospitals
 
 if __name__ == "__main__":
     #print(suggestHospital(getCoordinates(65201),"healthcare"))
