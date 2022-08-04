@@ -379,12 +379,3 @@ fieldset {
 .btn-answer {
     margin-right: 25px;
 }
-​
-.score {
-    margin-top: 50px;
-    font-weight: bolder;
-    max-width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-}

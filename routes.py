@@ -65,9 +65,9 @@ class User(db.Model,UserMixin):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-"""@app.route("/")
+@app.route("/")
 def home():
-    return render_template('home.html')"""
+    return render_template('home.html')
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -116,8 +116,8 @@ def logout():
   return redirect(url_for('login'))
 
 
-@app.route("/", methods = ['GET','POST'])# this tells you the URL the method below is related to
-def home():
+@app.route("/addsymptoms", methods = ['GET','POST'])# this tells you the URL the method below is related to
+def symptoms():
     #Get session Id for analysis
     session['ID'] = sessionID = getSessionId()
     if request.method == 'POST':
@@ -147,7 +147,7 @@ def home():
           db.session.commit()
         return redirect(url_for('results'))
 #        return "Done"
-    return render_template('home.html')
+    return render_template('addsymptoms.html')
 
 def check_url(target):
     ref_url = urlparse(request.host_url)
@@ -188,7 +188,6 @@ def profile():
 def results():
     print(session['hospitals'])
     return render_template('symptom_display.html',items=session['symptom'],diseases= session['diseases'],hospitals=session['hospitals'])
-
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
