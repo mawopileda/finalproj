@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-  <form method="POST">
+  <!-- <form method="POST">
     <h3 align="center">Create New Account</h3>
     
             {{ form.hidden_tag() }}
@@ -78,5 +78,81 @@
     {% if messages%}
       <p style="text-align:center;">{{ messages[-1] }} </p>
     {% endif %}
-  {% endwith %}
+  {% endwith %} -->
+
+  <h3 class="text-center mt-5"><strong>Create New Account</strong></h2>
+
+  <div class="login-page">
+    <div class="form">
+      <form class="login-form" method="POST">
+
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+              {{ form.username.label(class="form-control-label") }}
+              <i class="fas fa-user-circle"></i>
+              {% if form.username.errors %}
+                {{ form.username(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                  {% for error in form.username.errors%}
+                      <span>{{error}}</span>
+                  {% endfor %}
+                </div>
+
+              {% else %}
+                {{ form.username(class="form-control form-control-lg") }}
+              {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.email.label(class="form-control-label" ) }}
+
+            {% if form.email.errors %}
+            {{ form.email(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.email.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.email(class="form-control form-control-lg") }}
+        {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.password.label(class="form-control-label") }}
+            <i class="fas fa-lock"></i>
+            {% if form.password.errors %}
+              {{ form.password(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.password.errors%}
+                  <span>{{error}}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.password(class="form-control form-control-lg") }}
+            {% endif %}
+          </div>
+
+
+          <div class="form-group">
+            {{ form.confirm_password.label(class="form-control-label") }}
+            <i class="fas fa-lock"></i>
+            {% if form.confirm_password.errors %}
+              {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.confirm_password.errors%}
+                  <span>{{error}}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.confirm_password(class="form-control form-control-lg") }}
+            {% endif %}
+            </div>
+
+        <button>register</button>
+        <!-- <p class="message">Not registered? <a href="#">Create an account</a></p> -->
+      </form>
+    </div>
+  </div>
 {% endblock content %}
