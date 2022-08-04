@@ -64,8 +64,8 @@ class User(db.Model,UserMixin):
 
 class Meal(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  title = db.Column(db.String(20), unique=True, nullable=False)
-  recipe = db.Column(db.String(320), unique=True, nullable=False)
+  title = db.Column(db.String(20), nullable=False)
+  recipe = db.Column(db.String(320), nullable=False)
   username = db.Column(db.String(70))
 
 
@@ -85,6 +85,7 @@ def register():
     session['diseases'] = ''
     session['hospitals'] = ''
     session['symptom'] = ''
+    session['meals'] = ''
     if current_user.is_authenticated:
         logout_user()
     form = RegistrationForm()
@@ -177,13 +178,11 @@ def healthy():
   diet=calories=exclude=""
   if request.method == 'POST':
     if request.form["submit_button"] == 'Save':
-      print(session['meals'],"here")
       for meal in session["meals"]:
         new_meal = Meal(title=meal['title'],recipe=meal['sourceUrl'],username = current_user.username)
         print(new_meal.title)
         db.session.add(new_meal)
         db.session.commit()
-      session['meals'] = meals
       return redirect(url_for('results'))
 
     if meal_form.period.data:
@@ -212,8 +211,8 @@ def profile():
 @login_required
 @app.route("/symptom_display", methods = ['GET','POST'])
 def results():
-    print(session['hospitals'])
-    return render_template('symptom_display.html',items=session['symptom'],diseases= session['diseases'],hospitals=session['hospitals'])
+    print(session['meals'])
+    return render_template('symptom_display.html',items=session['symptom'],meals= session['meals'],hospitals=session['hospitals'])
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

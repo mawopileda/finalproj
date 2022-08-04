@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <h1>
-  Analysis result
+  Dashboard
 </h1>
 
 <head>
@@ -18,18 +18,18 @@
         {% endfor %}
     </div>
 </div>
-<!--<div class="card2">
-    <h4>Diseases</h4>
+<div class="card2">
+    <h4>Today's Meal Plan</h4>
     <div class='container'>
-        {% for disease in diseases %}
-        <p>{{ disease }}</p>
+        {% for meal in meals %}
+        <p>{{ meal['title'] }}:<a href="{{meal['sourceUrl']}}" target = "_blank">{{meal['sourceUrl']}}</a></p>
         {% endfor %}
     </div>
 </div>
-!-->
+
 <div class="card2">
-    <b>It is important to reach out to a doctor. Based on your symptoms we recommand you to reach to 
-    to one of those of hospitals. They will be able to help you appropriately.
+    <b>It is important to reach out to a doctor. We recommend you visit one of these hospitals in your area.
+        They will be able to help you appropriately. 
     </b>
     <div class="container">
     <table>
