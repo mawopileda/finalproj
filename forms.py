@@ -20,3 +20,10 @@ class LoginForm(FlaskForm):
                         validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+class MealForm(FlaskForm):
+    period = StringField('Period')
+    diet = StringField('Diet')
+    calories= StringField('Calories')
+    exclude= StringField('exclude')
+    #submit= StringField('Generate')

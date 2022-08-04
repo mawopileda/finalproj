@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block content %}
+<form method="POST">
+    <fieldset class="form-group">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.period.label(class="form-control-label") }}
+            <i class="fa fa-envelope"></i>
+            {% if form.period.errors %}
+            {{ form.period(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.period.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.period(class="form-control form-control-lg") }}
+        {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.diet.label(class="form-control-label") }}
+            <i class="fa fa-envelope"></i>
+            {% if form.diet.errors %}
+            {{ form.diet(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.diet.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.diet(class="form-control form-control-lg") }}
+        {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.calories.label(class="form-control-label") }}
+            <i class="fa fa-envelope"></i>
+            {% if form.calories.errors %}
+            {{ form.calories(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.calories.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.calories(class="form-control form-control-lg") }}
+        {% endif %}
+        </div>
+
+        <div class="form-group">
+            {{ form.exclude.label(class="form-control-label") }}
+            <i class="fa fa-envelope"></i>
+            {% if form.exclude.errors %}
+            {{ form.exclude(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.exclude.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.exclude(class="form-control form-control-lg") }}
+        {% endif %}
+        </div>
+    
+    </fieldset>
+    <input type="submit" class="btn btn-primary btn-forms">
+    <div id = "result_container">
+        {% for meal in meals %}
+            <table> 
+                <tr>
+                <td><h3>{{ meal['title'] }} </h3></td> <td><a href="{{meal['sourceUrl']}}">{{meal['sourceUrl']}}</a></td>
+                </tr>
+            </table>
+        {% endfor %}
+
+        <h3>Meal Plan Summary:</h3>
+        <p>Calories : {{ nutrients["calories"] }}</p>
+        <p>Carbohydrates : {{ nutrients["carbohydrates"] }}</p>
+        <p>Fat : {{ nutrients["fat"] }}</p>
+        <p>Protein : {{ nutrients["protein"] }}</p>
+    </div>
+</form>
+{% endblock content %}

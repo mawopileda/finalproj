@@ -106,7 +106,7 @@ def suggestHospital(coordinates,category):
         hospital = {'name': name, 'address': address}
         hospitals.append(hospital)
         
-    return hospitals
+    return places
 
 if __name__ == "__main__":
     #print(suggestHospital(getCoordinates(65201),"healthcare"))
@@ -115,6 +115,6 @@ if __name__ == "__main__":
     addSymptoms(sessionID,"AbdCramps","0")
     addSymptoms(sessionID,"Chills","0")
     print(getDiseases(Analyze(sessionID)))
-    #filter = filter(sessionID)
-    #categories = getCategories(filter)
-    #print(filter,'\n',suggestHospital(getCoordinates(65201),categories))
+    filter = filter(sessionID)
+    categories = getCategories(filter)
+    print(filter,'\n',suggestHospital(getCoordinates(65201),categories))

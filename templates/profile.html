@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3>{{username}}</h3>
+{% for symptom in symptoms %}
+<h4>{{ symptom.date }} {{ symptom.time }}</h4>
+<h5>{{ symptom.symptom }}
+{% endfor %}
+{% endblock content %}
