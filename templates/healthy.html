@@ -3,24 +3,8 @@
 <form method="POST">
     <fieldset class="form-group">
         {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.period.label(class="form-control-label") }}
-            <i class="fa fa-envelope"></i>
-            {% if form.period.errors %}
-            {{ form.period(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.period.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.period(class="form-control form-control-lg") }}
-        {% endif %}
-        </div>
-
-        <div class="form-group">
+            <div class="form-group">
             {{ form.diet.label(class="form-control-label") }}
-            <i class="fa fa-envelope"></i>
             {% if form.diet.errors %}
             {{ form.diet(class="form-control form-control-lg is-invalid") }}
             <div class="invalid-feedback">
@@ -33,24 +17,9 @@
         {% endif %}
         </div>
 
-        <div class="form-group">
-            {{ form.calories.label(class="form-control-label") }}
-            <i class="fa fa-envelope"></i>
-            {% if form.calories.errors %}
-            {{ form.calories(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.calories.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.calories(class="form-control form-control-lg") }}
-        {% endif %}
-        </div>
 
         <div class="form-group">
             {{ form.exclude.label(class="form-control-label") }}
-            <i class="fa fa-envelope"></i>
             {% if form.exclude.errors %}
             {{ form.exclude(class="form-control form-control-lg is-invalid") }}
             <div class="invalid-feedback">
@@ -69,7 +38,7 @@
         {% for meal in meals %}
             <table> 
                 <tr>
-                <td><h3>{{ meal['title'] }} </h3></td> <td><a href="{{meal['sourceUrl']}}">{{meal['sourceUrl']}}</a></td>
+                <td><h3>{{ meal['title'] }} </h3></td> <td><a href="{{meal['sourceUrl']}}" target = "_blank">{{meal['sourceUrl']}}</a></td>
                 </tr>
             </table>
         {% endfor %}

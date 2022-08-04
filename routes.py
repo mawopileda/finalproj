@@ -71,6 +71,8 @@ def home():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        logout_user()
     form = RegistrationForm()
     if form.validate_on_submit(): # checks if entries are valid
         user = User(username=form.username.data, email=form.email.data, password=bcrypt.generate_password_hash(form.password.data))
@@ -120,7 +122,7 @@ def symptoms():
     session['ID'] = sessionID = getSessionId()
     if request.method == 'POST':
         items = request.form.getlist('mycheckbox')
-        print(items)
+        session['symptom'] = items
         #change the user_symptom list to string and use it symtom text
         user_symptom = ""
         for item in items:
@@ -143,7 +145,7 @@ def symptoms():
           symptom = Symptomtrack2(time= str(current_time) , username = current_user.username,date= str(today1), symptom = user_symptom)
           db.session.add(symptom)
           db.session.commit()
-        return " ".join(session['diseases'])
+        return redirect(url_for('results'))
 #        return "Done"
     return render_template('addsymptoms.html')
 
@@ -164,12 +166,13 @@ def healthy():
     if meal_form.period.data:
       period = meal_form.period.data
     if meal_form.diet.data:
-      period = meal_form.period.data
+      diet = meal_form.diet.data
     if meal_form.calories.data:
-      period = meal_form.period.data
+      calories = meal_form.calories.data
     if meal_form.exclude.data:
-      period = meal_form.period.data
+      exclude = meal_form.exclude.data
     generated = generate_meal_plans(period,diet,calories,exclude)
+    print(generated)
     meals = generated['meals']
     nutrients = generated["nutrients"]
   return render_template('healthy.html',form = meal_form,meals = meals,nutrients=nutrients)
@@ -180,6 +183,11 @@ def profile():
   symptoms = Symptomtrack2.query.filter_by(username = current_user.username).order_by(Symptomtrack2.id.desc()).all()
   return render_template('profile.html',username=current_user.username,symptoms=symptoms)
 
+@login_required
+@app.route("/symptom_display", methods = ['GET','POST'])
+def results():
+    print(session['hospitals'])
+    return render_template('symptom_display.html',items=session['symptom'],diseases= session['diseases'],hospitals=session['hospitals'])
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

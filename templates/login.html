@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
+<!--
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login_style.css') }}">
+</head>
+-->
 <h3 class="text-center mt-5"><strong>Login to your account</strong></h2>
     <div class="login-page">
         <div class="form">
@@ -47,4 +52,4 @@
       <p style="text-align:center;"">{{ messages[-1] }} </p>
     {% endif %}
   {% endwith %}
-{% endblock content %}
+{% endblock %}
