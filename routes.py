@@ -120,11 +120,12 @@ def home():
     session['ID'] = sessionID = getSessionId()
     if request.method == 'POST':
         items = request.form.getlist('mycheckbox')
+        print(items)
         #change the user_symptom list to string and use it symtom text
         user_symptom = ""
         for item in items:
             addSymptoms(sessionID,item,"0")
-            user_symptom += str(item) + " "
+            user_symptom += str(item) + ","
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
         #date = now.day()
